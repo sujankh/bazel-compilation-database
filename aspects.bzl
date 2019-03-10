@@ -42,7 +42,8 @@ def _compilation_db_json(compilation_db):
     # Return a JSON string for the compilation db entries.
 
     entries = [entry.to_json() for entry in compilation_db]
-    return ",\n ".join(entries)
+    return "[\n{json_str}\n]\n".format(json_str=",\n ".join(entries))
+
 
 def _is_cpp_target(srcs):
     for src in srcs:
@@ -199,7 +200,7 @@ def _compilation_database_impl(ctx):
     for target in ctx.attr.targets:
         compilation_db += target[CompilationAspect].compilation_db
 
-    content = "[\n" + _compilation_db_json(compilation_db) + "\n]\n"
+    content = _compilation_db_json(compilation_db)
     content = content.replace("__EXEC_ROOT__", ctx.attr.exec_root)
     ctx.actions.write(output = ctx.outputs.filename, content = content)
 
