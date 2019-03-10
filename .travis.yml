@@ -12,3 +12,7 @@ script:
   - cd tests
   - bazel build :compdb
   - diff expected_file.json bazel-bin/compile_commands.json
+  - ln -s ../aspects.bzl .
+  - cp ../.ycm_extra_conf.py .
+  - python .ycm_extra_conf.py a.cc
+  - diff expected_A.compile_commands.json bazel-bin/A.compile_commands.json
